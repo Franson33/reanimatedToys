@@ -2,7 +2,7 @@ import { Platform } from 'react-native';
 
 import { moderateScale, moderateVerticalScale, scale, verticalScale } from 'react-native-size-matters';
 
-import { shadowSizes, spacing } from '@styles';
+import { colors, shadowSizes, spacing } from '@styles';
 
 import { Theme } from './types';
 
@@ -12,6 +12,9 @@ export const theme: Theme = {
   verticalScale,
   moderateScale,
   moderateVerticalScale,
+
+  // Colors
+  colors: { ...colors },
 
   // Platform specific shadows
   shadowNone: {
@@ -32,7 +35,6 @@ export const theme: Theme = {
 
   // Scaled spacing sizes
   none: spacing.None,
-  auto: spacing.Auto,
   miniscule: scale(spacing.Miniscule),
   smallest: scale(spacing.Smallest),
   small: scale(spacing.Small),
