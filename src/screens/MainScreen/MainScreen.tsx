@@ -2,6 +2,7 @@ import React, { FC } from 'react';
 import { FlatList, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
+import Animated from 'react-native-reanimated';
 
 import { HomeStackParams, homeStackScreens } from '@navigator';
 import { theme } from '@theme';
@@ -20,8 +21,12 @@ export const MainScreen: FC<TMainScreenProps> = ({ route, navigation }) => {
         contentContainerStyle={styles.contentContainer}
         renderItem={({ item }) => (
           <TouchableOpacity style={styles.item} onPress={() => navigation.navigate(item.navigateTo)}>
-            <Text style={styles.title}>{item.title}</Text>
-            <Text style={styles.description}>{item.description}</Text>
+            <Animated.Text style={styles.title} sharedTransitionTag="Title">
+              {item.title}
+            </Animated.Text>
+            <Animated.Text style={styles.description} sharedTransitionTag="Description">
+              {item.description}
+            </Animated.Text>
           </TouchableOpacity>
         )}
       />
