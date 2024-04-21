@@ -1,5 +1,15 @@
-import { StyleSheet, Text, View } from 'react-native';
+import { StyleSheet, View } from 'react-native';
 
+import { Gesture, GestureDetector } from 'react-native-gesture-handler';
+import Animated, {
+  interpolate,
+  useAnimatedStyle,
+  useSharedValue,
+  withDecay,
+  withSpring,
+} from 'react-native-reanimated';
+
+import 'react-native-reanimated';
 import { ListItem } from '@components';
 import { theme } from '@theme';
 
@@ -18,23 +28,46 @@ const ANGLE_STEP = 360 / (listConfig.length - 1);
 const ITEM_SIZE = theme.scale(80);
 
 export const CircleList = () => {
+  const rotation = useSharedValue(0);
+
+  const panGesture = Gesture.Pan()
+    .onUpdate(event => {
+      rotation.value += -event.translationY / 1000;
+      event.translationX = 0;
+    })
+    .onEnd(event => {
+      rotation.value = withDecay({
+        velocity: -event.velocityX / 100,
+      });
+    });
+
   return (
     <View style={styles.container}>
-      <View style={styles.listContainer}>
-        {listConfig.map(({ title, description }, index) => {
-          if (index === 0) {
-            return (
-              <ListItem containerStyle={[styles.centerItem, styles.item]} title={title} description={description} />
-            );
-          } else {
-            const angle = (ANGLE_STEP * (index - 1) * Math.PI) / 180;
-            const x = RADIUS * Math.cos(angle) + RADIUS - ITEM_SIZE / 2;
-            const y = RADIUS * Math.sin(angle) + RADIUS - ITEM_SIZE / 2;
-            const itemPosition = { top: y, left: x };
-            return <ListItem containerStyle={[styles.item, itemPosition]} title={title} description={description} />;
-          }
-        })}
-      </View>
+      <GestureDetector gesture={panGesture}>
+        <View style={styles.listContainer}>
+          {listConfig.map(({ title, description }, index) => {
+            if (index === 0) {
+              return (
+                <ListItem containerStyle={[styles.centerItem, styles.item]} title={title} description={description} />
+              );
+            } else {
+              const animatedStyle = useAnimatedStyle(() => {
+                const angle = ((ANGLE_STEP * (index - 1) + rotation.value * (180 / Math.PI)) * Math.PI) / 180;
+                const x = RADIUS * Math.cos(angle) + RADIUS - ITEM_SIZE / 2;
+                const y = RADIUS * Math.sin(angle) + RADIUS - ITEM_SIZE / 2;
+
+                return { top: y, left: x };
+              });
+
+              return (
+                <Animated.View key={title} style={animatedStyle}>
+                  <ListItem containerStyle={styles.item} title={title} description={description} />
+                </Animated.View>
+              );
+            }
+          })}
+        </View>
+      </GestureDetector>
     </View>
   );
 };

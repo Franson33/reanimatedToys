@@ -22,9 +22,11 @@ const styles = StyleSheet.create({
   title: {
     fontSize: theme.scale(16),
     fontWeight: '700',
+    color: theme.colors.PURPLE,
   },
   description: {
     fontSize: theme.scale(11),
     fontWeight: '400',
+    color: theme.colors.PURPLE,
   },
 });
