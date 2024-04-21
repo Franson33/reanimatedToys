@@ -1,31 +1,13 @@
-import { StyleSheet, View } from 'react-native';
+import { StyleSheet, Text, View } from 'react-native';
 
 import { Gesture, GestureDetector } from 'react-native-gesture-handler';
-import Animated, {
-  interpolate,
-  useAnimatedStyle,
-  useSharedValue,
-  withDecay,
-  withSpring,
-} from 'react-native-reanimated';
+import Animated, { interpolate, useAnimatedStyle, useSharedValue, withDecay } from 'react-native-reanimated';
 
 import 'react-native-reanimated';
 import { ListItem } from '@components';
 import { theme } from '@theme';
 
-const listConfig = [
-  { title: 'Title 1', description: 'Description 1' },
-  { title: 'Title 2', description: 'Description 2' },
-  { title: 'Title 3', description: 'Description 3' },
-  { title: 'Title 4', description: 'Description 4' },
-  { title: 'Title 5', description: 'Description 5' },
-  { title: 'Title 6', description: 'Description 6' },
-];
-
-const RADIUS = theme.scale(110);
-const WIDTH = RADIUS * 2;
-const ANGLE_STEP = 360 / (listConfig.length - 1);
-const ITEM_SIZE = theme.scale(80);
+import { ANGLE_STEP, ITEM_SIZE, listConfig, RADIUS, WIDTH } from './constants';
 
 export const CircleList = () => {
   const rotation = useSharedValue(0);
@@ -79,6 +61,7 @@ const styles = StyleSheet.create({
     width: theme.scale(300),
     height: theme.scale(300),
     backgroundColor: theme.colors.PINK_LIGHT,
+    borderRadius: theme.scale(120),
   },
   listContainer: {
     width: WIDTH,
@@ -86,7 +69,6 @@ const styles = StyleSheet.create({
   },
   item: {
     position: 'absolute',
-
     justifyContent: 'center',
     alignItems: 'center',
     width: ITEM_SIZE,
